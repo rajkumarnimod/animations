@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Format Converter</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h1 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        #container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #output {
+            display: none;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .selectformates {
+            display: block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .selectformates:hover {
+            background-color: #2980b9;
+        }
+
+        button {
+            background-color: #2ecc71;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        select {
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        a {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #c0392b;
+        }
+        
+        #content {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+        }
+        .filechoose{
+            display: block;
+            background-color: transparent;
+            color: #444242;
+            padding: 50px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 2px dashed rgb(107, 106, 106);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>File Format Converter</h1>
+
+        <label for="inputFile" class="filechoose">Choose a File</label>
+        <input type="file" id="inputFile" accept=".jpg, .jpeg, .png, .heic, .webp, .docx" onchange="displayFileName()" />
+        <span id="selectedFileName" style="display:none;"></span>
+
+        <label for="outputFormat" class="selectformates">Select Output Format:</label>
+        <select id="outputFormat">
+            <option value="png">PNG</option>
+            <option value="jpeg">JPEG</option>
+            <option value="jpg">JPG</option>
+            <option value="webp">WebP</option>
+        </select>
+
+        <button onclick="convertFile()">Convert File</button>
+
+        <div id="output" style="display: none;">
+            <h2>Converted File</h2>
+            <img id="outputImage" alt="Converted File" />
+            <a id="downloadLink" download="converted_file">Download Converted File</a>
+        </div>
+
+        <div id="content">
+            <h2>How to Use</h2>
+            <p>Welcome to the File Format Converter! Follow these simple steps:</p>
+            <ol>
+                <li>Click on the "Choose a File" button and select a file (JPG, JPEG, PNG, HEIC, WebP, or Word document).</li>
+                <li>Select the desired output format from the dropdown menu.</li>
+                <li>Click the "Convert File" button.</li>
+                <li>Once the conversion is complete, the converted file will be displayed below.</li>
+                <li>Click on the "Download Converted File" link to save the converted file to your device.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jimp"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html-docx-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/image-conversion"></script>
+
+    <script>
+        function displayFileName() {
+            const inputFile = document.getElementById('inputFile');
+            const selectedFileName = document.getElementById('selectedFileName');
+
+            if (inputFile.files.length > 0) {
+                const fileName = inputFile.files[0].name;
+                selectedFileName.style.display = 'inline';
+                selectedFileName.textContent = 'Selected File: ' + fileName;
+
+                // Clear previous conversion results
+                document.getElementById('output').style.display = 'none';
+                document.getElementById('outputImage').src = '';
+            } else {
+                selectedFileName.style.display = 'none';
+                selectedFileName.textContent = '';
+            }
+        }
+
+        async function convertFile() {
+            const inputFile = document.getElementById('inputFile');
+            const outputImage = document.getElementById('outputImage');
+            const downloadLink = document.getElementById('downloadLink');
+            const outputDiv = document.getElementById('output');
+            const outputFormat = document.getElementById('outputFormat').value;
+
+            if (inputFile.files.length === 0) {
+                alert('Please choose a file to convert.');
+                return;
+            }
+
+            const file = inputFile.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function (e) {
+                const convertedDataUrl = await convertToFormat(e.target.result, outputFormat);
+
+                outputImage.src = convertedDataUrl;
+                downloadLink.href = convertedDataUrl;
+                downloadLink.download = `converted_file.${outputFormat}`;
+
+                outputDiv.style.display = 'block';
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        async function convertToFormat(dataUrl, outputFormat) {
+            switch (outputFormat) {
+                case 'png':
+                    return convertImageToPNG(dataUrl);
+                case 'jpeg':
+                case 'jpg':
+                    return convertImageToJPEG(dataUrl);
+                case 'webp':
+                    return convertToWebP(dataUrl);
+                default:
+                    alert('Unsupported output format.');
+                    return null;
+            }
+        }
+
+        async function convertImageToPNG(dataUrl) {
+            const img = new Image();
+            img.src = dataUrl;
+
+            await img.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            return canvas.toDataURL('image/png');
+        }
+
+        async function convertImageToJPEG(dataUrl) {
+            const img = new Image();
+            img.src = dataUrl;
+
+            await img.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            return canvas.toDataURL('image/jpeg');
+        }
+
+        async function convertToWebP(dataUrl) {
+            const img = new Image();
+            img.src = dataUrl;
+
+            await img.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            const jpegBlob = await (await fetch(dataUrl)).blob();
+            const webpBlob = await imageConversion.convert(jpegBlob, {
+                outputType: imageConversion.Blob,
+                format: 'webp',
+                quality: 0.9,
+            });
+
+            return URL.createObjectURL(webpBlob);
+        }
+        async function convertToWebP(dataUrl) {
+                const img = new Image();
+                img.src = dataUrl;
+
+                await img.decode();
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                // Convert canvas to WebP format
+                const webpDataUrl = canvas.toDataURL('image/webp');
+
+                return webpDataUrl;
+            }
+    </script>
+</body>
+</html>

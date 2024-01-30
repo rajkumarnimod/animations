@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e2dfdc;
+        }
+
+        header,
+        section,
+        footer {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .topb {
+            height: 3px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            background-color: teal;
+            width: 100%;
+            transform-origin: left;
+            scale: 0 1;
+            animation: scroll-watch linear;
+            animation-timeline: scroll();
+        }
+
+        @keyframes scroll-watch {
+            to {
+                scale: 1 1;
+            }
+        }
+
+        @media (prefers-reduced-motion:no-preference) {
+            .acb{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 50%;
+                text-align: center;
+            }
+            .center {
+                
+                scale: 0.8;
+                opacity: 0;
+                animation: fade-in linear forwards;
+                animation-timeline: view();
+                animation-range-start: 15vh;
+                animation-range-end: 45vh;
+            }
+
+            @keyframes fade-in {
+                to {
+                    scale: 1;
+                    opacity: 1;
+                }
+            }
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div class="topb">
+    </div>
+    <header>
+
+    </header>
+    <section>
+        <div class="acb">
+            <div class="center">
+                <h1>Images</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, quis molestiae? Et aut quidem,
+                    doloribus possimus esse unde a suscipit aperiam itaque maxime asperiores harum voluptate excepturi
+                    praesentium nesciunt vero expedita eaque nobis perferendis tempore animi? Odit maxime aliquid et labore
+                    eveniet tempore quaerat? Rerum fuga quisquam praesentium vero necessitatibus consectetur cumque et
+                    minima laboriosam dolores quas, commodi dolore voluptate nostrum aut unde. Molestiae minus deleniti illo
+                    quas repudiandae ipsam beatae suscipit ipsa incidunt? Esse impedit alias ipsa ab tempora incidunt unde
+                    reiciendis ea inventore, necessitatibus aperiam, veritatis atque odit possimus eaque similique porro,
+                    dolore molestias. Nesciunt iure sint soluta.</p>
+            </div>
+        </div>
+    </section>
+ 
+    <section>
+        <div class="acb">
+            <div class="center">
+                <h1>Images</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, quis molestiae? Et aut quidem,
+                    doloribus possimus esse unde a suscipit aperiam itaque maxime asperiores harum voluptate excepturi
+                    praesentium nesciunt vero expedita eaque nobis perferendis tempore animi? Odit maxime aliquid et labore
+                    eveniet tempore quaerat? Rerum fuga quisquam praesentium vero necessitatibus consectetur cumque et
+                    minima laboriosam dolores quas, commodi dolore voluptate nostrum aut unde. Molestiae minus deleniti illo
+                    quas repudiandae ipsam beatae suscipit ipsa incidunt? Esse impedit alias ipsa ab tempora incidunt unde
+                    reiciendis ea inventore, necessitatibus aperiam, veritatis atque odit possimus eaque similique porro,
+                    dolore molestias. Nesciunt iure sint soluta.</p>
+            </div>
+        </div>
+    </section>
+    <footer></footer>
+</body>
+
+</html>

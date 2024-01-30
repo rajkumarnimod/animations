@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Page</title>
+    <!-- Include Razorpay JS library -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+    <h1>Donate for a Cause</h1>
+
+    <!-- Donation Form -->
+    <form id="donationForm">
+        <label for="amount">Amount (INR):</label>
+        <input type="number" id="amount" name="amount" required>
+        
+        <!-- UPI ID -->
+        <label for="upi">UPI ID:</label>
+        <input type="text" id="upi" name="upi" required>
+
+        <button type="button" onclick="makePayment()">Donate</button>
+    </form>
+
+    <script>
+        function makePayment() {
+            var amount = document.getElementById('amount').value;
+            var upi = document.getElementById('upi').value;
+
+            // Razorpay Configuration
+            var options = {
+                key: 'YOUR_RAZORPAY_KEY',
+                amount: amount * 100, // Amount is in paise
+                currency: 'INR',
+                name: 'Your Organization Name',
+                description: 'Donation',
+                image: 'URL_TO_YOUR_ORGANIZATION_LOGO',
+                handler: function(response) {
+                    // Handle successful payment response
+                    alert('Payment successful! Transaction ID: ' + response.razorpay_payment_id);
+                },
+                prefill: {
+                    name: 'Donor Name',
+                    email: 'donor@email.com',
+                    contact: '1234567890'
+                },
+                notes: {
+                    address: 'Donor Address'
+                },
+                theme: {
+                    color: '#3399cc'
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.open();
+        }
+    </script>
+
+</body>
+</html>

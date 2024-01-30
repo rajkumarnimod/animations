@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        header,
+        section {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: black;
+        }
+
+        p {
+            font-size: 1.8rem;
+            color: black;
+        }
+
+        div {
+            width: 70%;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .scroll-reveal span{
+            color: hsl(0 0% 100% / 0.2);
+            background-clip: text;
+            background-repeat: no-repeat;
+            background-size: 0% 100%;
+            background-image: linear-gradient(90deg, rgb(39, 37, 37), rgb(23, 22, 22));
+            animation: scroll-reveal linear forwards;
+            animation-timeline: view(y);
+        }
+        .scroll-reveal h1 span{
+            animation-range-start:cover 20vh;
+            animation-range-end: cover 30vh;
+        }
+        .scroll-reveal p span{
+            animation-range-start:cover 21vh;
+            animation-range-end: cover 50vh;
+        }
+        @keyframes scroll-reveal{
+            to{
+                background-size: 100% 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+    <section>
+        <div class="scroll-reveal">
+            <h1><span>RAJKUMAR SHARMA</span></h1>
+            <P><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis fugiat officia molestiae in fugit
+                    delectus, accusantium exercitationem distinctio dolore quos sed quia ipsa rerum, animi facilis
+                    libero officiis sint iure.
+                </span>
+            </P>
+        </div>
+    </section>
+    <section></section>
+</body>
+
+</html>
